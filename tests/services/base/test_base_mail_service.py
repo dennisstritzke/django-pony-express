@@ -385,8 +385,7 @@ class BaseEmailServiceTest(TestCase):
         self.assertIs(service._check_email_structure_validity(email="no-at-example.com"), False)
 
     @time_machine.travel(datetime.date(2020, 6, 26))
-    @override_settings(LANGUAGE_CODE="de")
-    @mock.patch.object(BaseEmailService, "get_translation", return_value="nl-BE")
+    @override_settings(LANGUAGE_CODE="nl-BE")
     def test_build_mail_object_deactivates_language_afterwards(self, *args):
         service = BaseEmailService(recipient_email_list="noreply@example.com")
         service.subject = _("Friday")
@@ -395,9 +394,9 @@ class BaseEmailServiceTest(TestCase):
 
         # Assertions
         # Assert, that email was rendered in nl-BE language
-        self.assertEqual("vrijdag", msg_obj.subject)
-        self.assertIn("vrijdag", msg_obj.body)
-        self.assertIn("vrijdag", msg_obj.alternatives[0][0])
+        self.assertEqual("be vrijdag", msg_obj.subject)
+        self.assertIn("be vrijdag", msg_obj.body)
+        self.assertIn("be vrijdag", msg_obj.alternatives[0][0])
 
         # Assert, system language is back to "de"
         self.assertEqual(settings.LANGUAGE_CODE, "de")
