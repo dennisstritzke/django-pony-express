@@ -10,6 +10,7 @@ from django.core import mail
 from django.core.mail import EmailMultiAlternatives
 from django.test import TestCase, override_settings
 from django.utils import translation
+from django.utils.translation import gettext_lazy as _
 
 from django_pony_express.errors import EmailServiceAttachmentError, EmailServiceConfigError
 from django_pony_express.services.base import BaseEmailService
@@ -388,11 +389,13 @@ class BaseEmailServiceTest(TestCase):
     @mock.patch.object(BaseEmailService, "get_translation", return_value="nl-BE")
     def test_build_mail_object_deactivates_language_afterwards(self, *args):
         service = BaseEmailService(recipient_email_list="noreply@example.com")
+        service.subject = _("Friday")
         service.template_name = "testapp/test_email.html"
         msg_obj = service._build_mail_object()
 
         # Assertions
         # Assert, that email was rendered in nl-BE language
+        self.assertEqual("vrijdag", msg_obj.subject)
         self.assertIn("vrijdag", msg_obj.body)
         self.assertIn("vrijdag", msg_obj.alternatives[0][0])
 

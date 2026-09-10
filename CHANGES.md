@@ -1,5 +1,9 @@
 # Changelog
 
+**3.2.1** (2026-09-10)
+  * Fixed the translation of email subjects to actually be `BaseEmailService.get_translation()` instead of the projects
+    default language.
+
 **3.2.0** (2026-08-27)
   * Added support for Django 6.1
   * **Breaking change:** Dropped support for Django 4.2, whose extended support ended in April 2026
